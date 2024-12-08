@@ -2,6 +2,7 @@
 
 ExpenseVue is an application intended to manage the user's finances. 
 The user can track transactions, create budgets, view the general balance, and manage expenses and income. 
+
 [Yapily API](https://docs.yapily.com/) is used to synchronize with different bank accounts and get automatic transactions.
 
 ## Before you start ⚙️
