@@ -1,15 +1,14 @@
 # ExpenseVue
 
-ExpenseVue is a full stack web application for personal finance management.
+ExpenseVue is a full-stack web application for personal finance management.
 
 ## Main Features 🗝️
 
 - **Account Management:**  
-  - Users are able to create an account using an email address and a secure password, which will be used for the authentication.
-  - Enables password resets via email in case of forgotten credentials.
-  - Accounts can be deleted at the user's discretion, permanently erasing all related data from the system.
-- **Profile Management:**
-  Allows users to update personal information and upload a profile picture.
+  - Accounts are created using an email address and a secure password, which are used for authentication.
+  - Supports password resets via email in case of forgotten credentials.
+  - Allows users to delete their account, with all associated information automatically removed from the system.
+- **Profile Management:** Allows users to update personal information and upload a profile picture.
 - **Bank Connections:**
   - Supports secure connection and synchronization of bank accounts for automatic transaction imports.
   - Manages the addition, updating, and removal of bank connections, with support for manual financial sources.
@@ -22,10 +21,8 @@ ExpenseVue is a full stack web application for personal finance management.
 - **Balance Overview:**
   - Presents real-time summaries of total balances, monthly income, and expenses through visual cards and clear summaries.
   - Provides interactive charts and graphs to help users gain insights into their financial data.
-- **Contact & Support:**
-  Includes a built-in contact form for user feedback and support requests.
-- **Responsive Design:**
-  Delivers a seamless user experience across both desktop and mobile platforms.
+- **Contact & Support:** Includes a built-in contact form for user feedback and support requests.
+- **Responsive Design:** Delivers a seamless user experience across both desktop and mobile platforms.
 
 
 ## Architecture 🏗️
