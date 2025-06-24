@@ -4,7 +4,7 @@ ExpenseVue is a full stack web application for personal finance management.
 
 ## Main Features 🗝️
 
-**Account Management:**  
+- **Account Management:**  
   - Users are able to create an account using an email address and a secure password, which will be used for the authentication.
   - Enables password resets via email in case of forgotten credentials.
   - Accounts can be deleted at the user's discretion, permanently erasing all related data from the system.
