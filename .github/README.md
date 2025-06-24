@@ -11,7 +11,7 @@ ExpenseVue is a full stack web application for personal finance management.
 - **Profile Management:**
   Allows users to update personal information and upload a profile picture.
 - **Bank Connections:**
-  - Supports secure connection and synchronization of bank accounts using the [Yapily API](https://docs.yapily.com/) for automatic transaction imports.
+  - Supports secure connection and synchronization of bank accounts for automatic transaction imports.
   - Manages the addition, updating, and removal of bank connections, with support for manual financial sources.
 - **Transaction Management:**
   - Facilitates the addition, editing, and deletion of income and expense transactions.
@@ -33,7 +33,7 @@ ExpenseVue is a full stack web application for personal finance management.
 - **Frontend:** React.js (with React Router, Context API, and reusable components).
 - **Backend:** Python Flask (RESTful API, and JWT authentication).
 - **Database:** SQLAlchemy (supports PostgreSQL, MySQL, and SQLite).
-- **Other Services:** [Cloudinary](https://cloudinary.com/) (for user image management), [EmailJS](https://www.emailjs.com/) (for notifications and password recovery).
+- **Other Services:** [Cloudinary](https://cloudinary.com/) (for user image management), [Yapily API](https://docs.yapily.com/) (for bank synchronization), and [EmailJS](https://www.emailjs.com/) (for notifications and password recovery).
 
 ## Main Folder Structure 🔍
 
