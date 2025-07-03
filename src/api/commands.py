@@ -4,7 +4,7 @@ Flask commands are usefull to run cronjobs or tasks outside of the API but sill 
 with youy database, for example: Import the price of bitcoin every night as 12am
 """
 import click
-from api.models import db, Users
+from src.api.models import db, Users
 
 
 def setup_commands(app):
