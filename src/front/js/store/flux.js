@@ -573,7 +573,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			getUser: async (id) => {
 				try {
-					const token = getStore().token || localStorage.getItem("jwt_token");
+					const token = getStore().token || localStorage.getItem("token");
 					const response = await fetch(`${process.env.BACKEND_URL}/api/users/${id}`, {
 						method: "GET",
 						headers: {
