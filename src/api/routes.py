@@ -408,53 +408,22 @@ def balances():
 def categories():
     response_body = {}
     current_user = get_jwt_identity()
-
-    try:
-        if request.method == 'GET':
-            print("📥 GET /categories")
-            print("Headers:", dict(request.headers))
-            print("Query Params:", request.args)
-
-            rows = db.session.execute(
-                db.select(Categories).where(Categories.user_id == current_user['user_id'])
-            ).scalars()
-
-            result = [row.serialize() for row in rows]
-            response_body['message'] = "List of the categories"
-            response_body['results'] = result
-            return jsonify(response_body), 200
-
-        elif request.method == 'POST':
-            print("📥 POST /categories")
-            print("Headers:", dict(request.headers))
-            print("Raw Body:", request.get_data())
-
-            data = request.get_json(silent=True)
-            print("Parsed JSON:", data)
-
-            if not data:
-                return jsonify({"error": "Missing or invalid JSON"}), 422
-
-            # Validación básica
-            if not data.get('name'):
-                return jsonify({"error": "Missing 'name' field"}), 400
-
-            row = Categories(
-                name=data.get('name'),
-                description=data.get('description'),
-                user_id=current_user['user_id']  # ⚠️ No confíes en el body para esto
-            )
-
-            db.session.add(row)
-            db.session.commit()
-
-            response_body['message'] = "Category created successfully"
-            response_body['results'] = row.serialize()
-            return jsonify(response_body), 201
-
-    except Exception as e:
-        print("🔥 ERROR in /categories:", str(e))
-        return jsonify({"error": "Internal server error", "details": str(e)}), 500
+    if request.method == 'GET':
+        rows = db.session.execute(db.select(Categories).where(Categories.user_id == current_user['user_id'])).scalars()
+        result = [row.serialize() for row in rows]
+        response_body['message'] = "List of the categories"
+        response_body['results'] = result
+        return response_body, 200
+    if request.method == 'POST':
+        data = request.json
+        row = Categories(name = data.get('name'),
+                         description = data.get('description'),
+                         user_id = data.get('user_id'))
+        db.session.add(row)
+        db.session.commit()
+        response_body['message'] = "Creating a category"
+        response_body['results'] = row.serialize()
+        return response_body, 200
 
 
 @api.route('/categories/<int:id>', methods=['GET', 'PUT', 'DELETE'])

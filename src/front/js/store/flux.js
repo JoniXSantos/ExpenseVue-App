@@ -200,7 +200,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const options = {
 					method: 'GET',
 					headers: {
-						'Content-Type': 'application/json',
 						'Authorization': `Bearer ${localStorage.getItem('token')}`
 					}
 				};
@@ -295,7 +294,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const options = {
 					method: 'POST',
 					headers: {
-						'Content-Type': 'application/json',
 						'Authorization': `Bearer ${localStorage.getItem('token')}`
 					},
 					body: JSON.stringify({ consentToken: consentToken, institutionId: institutionId })
@@ -357,7 +355,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const options = {
 					method: 'GET',
 					headers: {
-						'Content-Type': 'application/json',
 						'Authorization': `Bearer ${token}`
 					},
 				};
@@ -438,7 +435,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const options = {
 					method: 'GET',
 					headers: {
-						'Content-Type': 'application/json',
 						'Authorization': `Bearer ${token}`
 					},
 				};
@@ -528,7 +524,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const options = {
 					method: 'GET',
 					headers: {
-						'Content-Type': 'application/json',
 						'Authorization': `Bearer ${token}`
 					},
 				};
@@ -562,7 +557,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const options = {
 					method: 'GET',
 					headers: {
-						'Content-Type': 'application/json',
 						'Authorization': `Bearer ${token}`
 					}
 				};
@@ -610,7 +604,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const options = {
 					method: 'GET',
 					headers: {
-						'Content-Type': 'application/json',
 						'Authorization': `Bearer ${token}`
 					},
 				};
@@ -687,7 +680,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const options = {
 					method: 'GET',
 					headers: {
-						'Content-Type': 'application/json',
 						'Authorization': `Bearer ${token}`
 					},
 				};
