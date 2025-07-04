@@ -54,7 +54,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				// console.log("Token desde el store:", token);
 
 				if (!token) {
-					token = localStorage.getItem("jwt_token");
+					token = localStorage.getItem("token");
 					// console.log("Token desde el localStorage:", token);
 					if (token) {
 						setStore({ token });
