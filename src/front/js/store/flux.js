@@ -48,22 +48,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({ token: data.access_token, user: data.results, isLogged: true, message: null });
 				return true;
 			},
-			getToken: () => {
-				// esto funciona bien (lo hago trayendo el token desde consola)
-				let token = getStore().token;
-				// console.log("Token desde el store:", token);
-
-				if (!token) {
-					token = localStorage.getItem("token");
-					// console.log("Token desde el localStorage:", token);
-					if (token) {
-						setStore({ token });
-					}
-					// console.log("Token desde el store:", token);
-				}
-				// console.log("Token final:", token);
-				return token;
-			},
 			getBalanceData: () => {
 				const transactions = getStore().transactions;
 				console.log('Esto es transactions:', transactions);
