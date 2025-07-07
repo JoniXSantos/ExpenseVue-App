@@ -33,6 +33,6 @@ databases: # Render PostgreSQL database
       plan: free # optional; defaults to starter
 
 routes:
-  - type: rewrite
-    source: /*
-    destination: /
+    - type: rewrite
+      source: /*
+      destination: /
