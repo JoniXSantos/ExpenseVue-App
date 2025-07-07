@@ -66,7 +66,7 @@ def login():
     if not user:
         response_body['message'] = "The email or password is incorrect"
         return response_body, 401
-    access_token = create_access_token(identity={'email': user.email, 'user_id': user.id})
+    access_token = create_access_token(identity=str(user.id), additional_claims={"email": user.email})
     response_body['message'] = f'Welcome, {email}'
     response_body['access_token'] = access_token
     response_body['results'] = user.serialize()
@@ -108,8 +108,8 @@ def institutions():
 @jwt_required()
 def connections():
     response_body = {}
-    current_user = get_jwt_identity()
-    rows = db.session.execute(db.select(Connections).where(Connections.user_id == current_user['user_id'])).scalars()
+    current_user = int(get_jwt_identity())
+    rows = db.session.execute(db.select(Connections).where(Connections.user_id == current_user)).scalars()
     result = [row.serialize() for row in rows]
     response_body['message'] = "These are your connections (GET)"
     response_body['results'] = result
@@ -120,8 +120,8 @@ def connections():
 @jwt_required()
 def connection(id):
     response_body = {}
-    current_user = get_jwt_identity()
-    row = db.session.execute(db.select(Connections).where(Connections.user_id == current_user['user_id'], Connections.id == id)).scalar()
+    current_user = int(get_jwt_identity())
+    row = db.session.execute(db.select(Connections).where(Connections.user_id == current_user, Connections.id == id)).scalar()
     db.session.execute(db.delete(Transactions).where(Transactions.source_id.in_(db.session.execute(db.select(Sources.id).where(Sources.connection_id == id)).scalars())))
     db.session.execute(db.delete(Sources).where(Sources.connection_id == id))
     db.session.delete(row)
@@ -135,8 +135,8 @@ def connection(id):
 @jwt_required()
 def create_yapily_user():
     response_body = {}
-    current_user = get_jwt_identity()
-    user = Users.query.filter_by(id=current_user['user_id']).first()
+    current_user = int(get_jwt_identity())
+    user = Users.query.filter_by(id=current_user).first()
     email_start = user.email.split('@')[0]
     url = "https://api.yapily.com/users"
     payload = {
@@ -198,8 +198,8 @@ def remove_yapily_user():
 @jwt_required()
 def account_auth_requests():
     response_body = {}
-    current_user = get_jwt_identity()
-    user = Users.query.filter_by(id=current_user['user_id']).first()
+    current_user = int(get_jwt_identity())
+    user = Users.query.filter_by(id=current_user).first()
     front_data = request.get_json()
     application_user_id = front_data.get('applicationUserId')
     institution_id = front_data.get('institutionId')
@@ -235,8 +235,8 @@ def account_auth_requests():
 @jwt_required()
 def consent_token():
     response_body = {}
-    current_user = get_jwt_identity()
-    user = Users.query.filter_by(id=current_user['user_id']).first()
+    current_user = int(get_jwt_identity())
+    user = Users.query.filter_by(id=current_user).first()
     front_data = request.get_json()
     consent_token = front_data.get('consentToken')
     institution_id = front_data.get('institutionId')
@@ -253,8 +253,8 @@ def consent_token():
 @jwt_required()
 def accounts():
     response_body = {}
-    current_user = get_jwt_identity()
-    user = Users.query.filter_by(id=current_user['user_id']).first()
+    current_user = int(get_jwt_identity())
+    user = Users.query.filter_by(id=current_user).first()
     consent_token = request.headers.get('consent')
     connection = Connections.query.filter_by(consent_token=consent_token).first()
     url = 'https://api.yapily.com/accounts'
@@ -293,8 +293,8 @@ def accounts():
 @jwt_required()
 def bank_transactions():
     response_body = {}
-    current_user = get_jwt_identity()
-    user = Users.query.filter_by(id=current_user['user_id']).first()
+    current_user = int(get_jwt_identity())
+    user = Users.query.filter_by(id=current_user).first()
     consent_token = request.headers.get('consent')
     source_id = request.headers.get('sourceId')
     connection = Connections.query.filter_by(consent_token=consent_token, user_id=user.id).first()
@@ -337,9 +337,9 @@ def bank_transactions():
 @jwt_required()
 def sources():
     response_body = {}
-    current_user = get_jwt_identity()
+    current_user = int(get_jwt_identity())
     if request.method == 'GET':
-        rows = db.session.execute(db.select(Sources).where(Sources.user_id == current_user['user_id'])).scalars()
+        rows = db.session.execute(db.select(Sources).where(Sources.user_id == current_user)).scalars()
         result = [row.serialize() for row in rows]
         response_body['message'] = "These are your sources (GET)"
         response_body['results'] = result
@@ -349,7 +349,7 @@ def sources():
         row = Sources(name = data.get('name'),
                       type_source = data.get('type_source'),
                       amount = data.get('amount'),
-                      user_id = current_user['user_id'])
+                      user_id = current_user)
         db.session.add(row)
         db.session.commit()
         response_body['message'] = "You have a new source (POST)"
@@ -361,8 +361,8 @@ def sources():
 @jwt_required()
 def source(id):
     response_body = {}
-    current_user = get_jwt_identity()
-    row = db.session.execute(db.select(Sources).where(Sources.user_id == current_user['user_id'], Sources.id == id)).scalar()
+    current_user = int(get_jwt_identity())
+    row = db.session.execute(db.select(Sources).where(Sources.user_id == current_user, Sources.id == id)).scalar()
     if not row:
         response_body['message'] = "This source does not exist"
         response_body['results'] = {}
@@ -392,8 +392,8 @@ def source(id):
 @jwt_required()
 def balances():
     response_body = {}
-    current_user = get_jwt_identity()
-    row = db.session.execute(db.select(Balances).where(Balances.user_id == current_user['user_id'])).scalar()
+    current_user = int(get_jwt_identity())
+    row = db.session.execute(db.select(Balances).where(Balances.user_id == current_user)).scalar()
     if not row:
         response_body['message'] = "Your balance is empty"
         return response_body, 200
@@ -407,9 +407,9 @@ def balances():
 @jwt_required()
 def categories():
     response_body = {}
-    current_user = get_jwt_identity()
+    current_user = int(get_jwt_identity())
     if request.method == 'GET':
-        rows = db.session.execute(db.select(Categories).where(Categories.user_id == current_user['user_id'])).scalars()
+        rows = db.session.execute(db.select(Categories).where(Categories.user_id == current_user)).scalars()
         result = [row.serialize() for row in rows]
         response_body['message'] = "List of the categories"
         response_body['results'] = result
@@ -430,8 +430,8 @@ def categories():
 @jwt_required()
 def category(id):
     response_body = {}
-    current_user = get_jwt_identity()
-    row = db.session.execute(db.select(Categories).where(Categories.user_id == current_user['user_id'], Categories.id == id)).scalar()
+    current_user = int(get_jwt_identity())
+    row = db.session.execute(db.select(Categories).where(Categories.user_id == current_user, Categories.id == id)).scalar()
     if not row:
         response_body['message'] = f'The category {id} does not exist'
         response_body['results'] = {}
@@ -461,11 +461,11 @@ def category(id):
 @jwt_required()
 def transactions():
     response_body = {}
-    current_user = get_jwt_identity()
-    rows = db.session.execute(db.select(Transactions).join(Sources).where(Sources.user_id == current_user['user_id'])).scalars().all()
+    current_user = int(get_jwt_identity())
+    rows = db.session.execute(db.select(Transactions).join(Sources).where(Sources.user_id == current_user)).scalars().all()
     for row in rows:
-        print(f"{row.source_to.user_id} - current_user {current_user['user_id']}")
-        if row.source_to.user_id != current_user['user_id']:
+        print(f"{row.source_to.user_id} - current_user {current_user}")
+        if row.source_to.user_id != current_user:
             response_body['message'] = f'No puedes hacer esta transaccion: {row.id}'
             response_body['results'] = {}
             return response_body, 403
@@ -494,8 +494,8 @@ def transactions():
 @jwt_required()
 def transaction(id):
     response_body = {}
-    current_user = get_jwt_identity()
-    row = db.session.execute(db.select(Transactions).join(Sources).where(Sources.user_id == current_user['user_id'], Transactions.id == id)).scalar()
+    current_user = int(get_jwt_identity())
+    row = db.session.execute(db.select(Transactions).join(Sources).where(Sources.user_id == current_user, Transactions.id == id)).scalar()
     if not row:
         response_body['message'] = "This Transaction does not exist"
         response_body['results'] = {}
@@ -529,8 +529,8 @@ def transaction(id):
 @jwt_required()
 def fixed_expenses():
     response_body = {}
-    current_user = get_jwt_identity()
-    expenses = db.session.execute(db.select(FixedExpenses).join(Categories).where(Categories.user_id == current_user['user_id'])).scalars()
+    current_user = int(get_jwt_identity())
+    expenses = db.session.execute(db.select(FixedExpenses).join(Categories).where(Categories.user_id == current_user)).scalars()
     if request.method == 'GET':
         result = [row.serialize() for row in expenses]
         response_body['message'] = "you got the fixed expenses list!"
@@ -557,8 +557,8 @@ def fixed_expenses():
 @jwt_required()
 def fixed_expense_by_id(id):
     expense = FixedExpenses.query.get_or_404(id)
-    current_user = get_jwt_identity()
-    category = db.session.execute(db.select(Categories).where(Categories.id == expense.category_id, Categories.user_id == current_user['user_id'])).scalar()
+    current_user = int(get_jwt_identity())
+    category = db.session.execute(db.select(Categories).where(Categories.id == expense.category_id, Categories.user_id == current_user)).scalar()
     if not category:
         return jsonify({'message': 'Unauthorized access to this expense'}), 403
     if request.method == 'GET':
@@ -584,9 +584,9 @@ def fixed_expense_by_id(id):
 @jwt_required()
 def budgets():
     response_body = {}
-    current_user = get_jwt_identity()
+    current_user = int(get_jwt_identity())
     if request.method == 'GET':
-        rows = db.session.execute(db.select(Budgets).distinct().where(Categories.user_id == current_user['user_id'])).scalars()
+        rows = db.session.execute(db.select(Budgets).distinct().where(Categories.user_id == current_user)).scalars()
         result = [row.serialize() for row in rows]
         response_body['message'] = "These are your budgets (GET)"
         response_body['results'] = result
@@ -608,8 +608,8 @@ def budgets():
 @jwt_required()
 def budget(id):
     response_body = {}
-    current_user = get_jwt_identity()
-    row = db.session.execute(db.select(Budgets).where(Categories.user_id == current_user['user_id'], Budgets.id == id)).scalar()
+    current_user = int(get_jwt_identity())
+    row = db.session.execute(db.select(Budgets).where(Categories.user_id == current_user, Budgets.id == id)).scalar()
     if not row:
         response_body['message'] = "This budget does not exist"
         response_body['results'] = {}
@@ -664,7 +664,7 @@ def users():
 @jwt_required()
 def user(id):
     response_body = {}
-    current_user = get_jwt_identity()
+    current_user = int(get_jwt_identity())
     print("current_user:", current_user) 
     row = db.session.execute(db.select(Users).where(Users.id == id)).scalar()
     if not row:
