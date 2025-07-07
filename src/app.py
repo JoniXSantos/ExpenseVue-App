@@ -46,12 +46,13 @@ def handle_invalid_usage(error):
 # Generate sitemap with all your endpoints
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def serve_react_app(path):
-    if os.path.exists(os.path.join(static_file_dir, path)):
+def catch_all(path):
+    print(f"Request for: {path}")
+    full_path = os.path.join(static_file_dir, path)
+    if path != "" and os.path.exists(full_path):
         return send_from_directory(static_file_dir, path)
-    else:
-        # Cuando la ruta no es un archivo real, se devuelve index.html
-        return send_from_directory(static_file_dir, 'index.html')
+    # Todo lo demás: React routes => index.html
+    return send_from_directory(static_file_dir, 'index.html')
 
 
 # Configure Cloudinary
