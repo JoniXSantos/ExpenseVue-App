@@ -31,8 +31,3 @@ databases: # Render PostgreSQL database
       region: ohio
       ipAllowList: [] # only allow internal connections
       plan: free # optional; defaults to starter
-
-routes:
-    - type: rewrite
-      source: /*
-      destination: /
