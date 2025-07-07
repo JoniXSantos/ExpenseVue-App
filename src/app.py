@@ -44,20 +44,17 @@ def handle_invalid_usage(error):
 
 
 # Generate sitemap with all your endpoints
-@app.route('/')
-def sitemap():
-    if ENV == "development":
-        return generate_sitemap(app)
-    return send_from_directory(static_file_dir, 'index.html')
-
-
-# Any other endpoint will try to serve it like a static file
+@app.route('/', defaults={'path': ''})
 @app.route('/<path:path>', methods=['GET'])
-def serve_any_other_file(path):
-    if not os.path.isfile(os.path.join(static_file_dir, path)):
-        path = 'index.html'
-    response = send_from_directory(static_file_dir, path)
-    response.cache_control.max_age = 0  # Avoid cache memory
+def catch_all(path):
+    if path == '' and ENV == "development":
+        return generate_sitemap(app)
+    full_path = os.path.join(static_file_dir, path)
+    if os.path.isfile(full_path):
+        response = send_from_directory(static_file_dir, path)
+    else:
+        response = send_from_directory(static_file_dir, 'index.html')
+    response.cache_control.max_age = 0
     return response
 
 

@@ -328,7 +328,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				getActions().getTransactions();
 				return data;
 			},
-			setCurrentTransaction: (transaction) => { setStore({ currentTransaction: transaction }) },
+			getCurrentTransaction: (transaction) => { setStore({ currentTransaction: transaction }) },
 			getTransactions: async () => {
 				const uri = `${getStore().host}/api/transactions`;
 				const token = getStore().token
@@ -392,7 +392,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log('Error:', response.status, response.statusText);
 					return
 				}
-				getActions().setCurrentTransactions({});
+				getActions().getCurrentTransaction({});
 				getActions().getTransactions();
 			},
 			deleteTransaction: async (id) => {

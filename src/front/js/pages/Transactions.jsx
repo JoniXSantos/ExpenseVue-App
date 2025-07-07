@@ -144,7 +144,7 @@ export const Transactions = () => {
 
 	const handleTransactions = () => {
 		actions.getTransactions();
-		actions.getCurrentTransactions();
+		actions.getCurrentTransaction();
 	}
 
 	return (
