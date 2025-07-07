@@ -15,7 +15,7 @@ import cloudinary
 from flask_cors import CORS
 
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
-static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public/')
+static_file_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public')
 app = Flask(__name__)
 app.url_map.strict_slashes = False
 CORS(app)
@@ -45,17 +45,13 @@ def handle_invalid_usage(error):
 
 # Generate sitemap with all your endpoints
 @app.route('/', defaults={'path': ''})
-@app.route('/<path:path>', methods=['GET'])
-def catch_all(path):
-    if path == '' and ENV == "development":
-        return generate_sitemap(app)
-    full_path = os.path.join(static_file_dir, path)
-    if os.path.isfile(full_path):
-        response = send_from_directory(static_file_dir, path)
+@app.route('/<path:path>')
+def serve_react_app(path):
+    if os.path.exists(os.path.join(static_file_dir, path)):
+        return send_from_directory(static_file_dir, path)
     else:
-        response = send_from_directory(static_file_dir, 'index.html')
-    response.cache_control.max_age = 0
-    return response
+        # Cuando la ruta no es un archivo real, se devuelve index.html
+        return send_from_directory(static_file_dir, 'index.html')
 
 
 # Configure Cloudinary
