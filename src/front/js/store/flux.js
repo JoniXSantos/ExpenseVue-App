@@ -278,6 +278,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const options = {
 					method: 'POST',
 					headers: {
+						"Content-Type": "application/json",
 						'Authorization': `Bearer ${localStorage.getItem('token')}`
 					},
 					body: JSON.stringify({ consentToken: consentToken, institutionId: institutionId })
