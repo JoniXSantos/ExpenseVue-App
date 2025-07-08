@@ -464,7 +464,6 @@ def transactions():
     current_user = int(get_jwt_identity())
     rows = db.session.execute(db.select(Transactions).join(Sources).where(Sources.user_id == current_user)).scalars().all()
     for row in rows:
-        print(f"{row.source_to.user_id} - current_user {current_user}")
         if row.source_to.user_id != current_user:
             response_body['message'] = f'No puedes hacer esta transaccion: {row.id}'
             response_body['results'] = {}
@@ -665,7 +664,6 @@ def users():
 def user(id):
     response_body = {}
     current_user = int(get_jwt_identity())
-    print("current_user:", current_user) 
     row = db.session.execute(db.select(Users).where(Users.id == id)).scalar()
     if not row:
         response_body['message'] = f'The user {id} does not exist'
